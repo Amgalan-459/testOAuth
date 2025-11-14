@@ -37,14 +37,16 @@ export class AuthService {
 
     sessionStorage.setItem('vk_state', state);
 
-    window.location.href =
-      `https://oauth.vk.com/authorize` +
-      `?client_id=${client_id}` +
-      `&redirect_uri=${redirect}` +
-      `&response_type=code` +
-      `&scope=${scope}` +
-      `&v=5.131` +
-      `&state=${state}`;
+    const params = new URLSearchParams({
+      client_id,
+      redirect_uri: redirect,
+      response_type: 'code',
+      scope,
+      v: '5.131',
+      state
+    });
+
+    window.location.href = `https://oauth.vk.com/authorize?${params.toString()}`;
   }
 
   login(email: string, password: string) {
