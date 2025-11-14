@@ -27,18 +27,19 @@ export class AuthCallback {
       return;
     }
 
+    const code = params['code'];
+
+    if (!code) {
+      await this.router.navigate(['/']);
+      return;
+    }
+
     try {
       if (provider === 'google') {
-        const code = params['code'];
-
-        if (!code) {
-          await this.router.navigate(['/']);
-          return;
-        }
-
         // Отправляем code на сервер
+        console.log("post")
         const result: any = await firstValueFrom(
-          this.http.post('/api/auth/google', {
+          this.http.post('https://localhost:5001/api/auth/google', {
             code,
             redirectUri: window.location.origin + '/auth/callback/google'
           })
@@ -50,7 +51,22 @@ export class AuthCallback {
         await this.router.navigate(['/']);
       }
 
-      // Можно добавить VK аналогично
+      if (provider === 'vk') {
+        try {
+          const result: any = await this.http
+            .post('/api/auth/vk/exchange-code', {
+              code,
+              redirectUri: window.location.origin + '/auth/callback/vk'
+            })
+            .toPromise();
+
+          localStorage.setItem('access_token', result.access_token);
+          await this.router.navigate(['/']);
+        } catch (err) {
+          console.error(err);
+          await this.router.navigate(['/']);
+        }
+      }
     } catch (err) {
       console.error('OAuth error', err);
       await this.router.navigate(['/']);
