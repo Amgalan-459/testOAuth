@@ -1,13 +1,13 @@
-import {inject, Injectable} from '@angular/core';
-import {AuthConfig, OAuthService} from 'angular-oauth2-oidc';
-import {HttpClient} from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { AuthConfig, OAuthService } from 'angular-oauth2-oidc';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private oauth = inject(OAuthService);
-  private http = inject(HttpClient)
+  private http = inject(HttpClient);
 
   private googleConfig: AuthConfig = {
     issuer: 'https://accounts.google.com',
@@ -20,11 +20,13 @@ export class AuthService {
     showDebugInformation: true,
   };
 
+  // 👇 Исправлено — инициализируем документы Google, но не логинимся
   initGoogle() {
     this.oauth.configure(this.googleConfig);
-    return this.oauth.loadDiscoveryDocumentAndTryLogin();
+    return this.oauth.loadDiscoveryDocument();
   }
 
+  // ✔ Вход через Google — редирект пользователя
   googleLogin() {
     this.oauth.initCodeFlow();
   }

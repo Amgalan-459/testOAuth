@@ -1,49 +1,59 @@
 import { Component } from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import {OAuthService} from 'angular-oauth2-oidc';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import {AuthService} from '../../services/auth-service';
 
 @Component({
   selector: 'app-auth-callback',
-  imports: [],
-  template: `
-    <p>Авторизация</p>
-  `,
-  styleUrl: './auth-callback.css',
+  template: `<p>Завершаем авторизацию...</p>`,
 })
-export class AuthCallback {
+export class AuthCallbackComponent {
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private auth: AuthService,
+    private http: HttpClient
+  ) {
+    this.handleCallback();
+  }
 
-  constructor(private route: ActivatedRoute, private router: Router, private http: HttpClient, oauth: OAuthService) {
-    route.queryParams.subscribe(async (params) => {
-      const code = params['code'];
+  private async handleCallback() {
+    const provider = this.route.snapshot.paramMap.get('provider');
+    const params = this.route.snapshot.queryParams;
 
-      const provider = this.route.snapshot.paramMap.get('provider');
+    if (!provider) {
+      await this.router.navigate(['/']);
+      return;
+    }
 
-      if (!code) await router.navigate(['/']);
-
+    try {
       if (provider === 'google') {
-        console.log('trying');
-        await oauth.tryLoginCodeFlow();
-        console.log("navigating")
-        await router.navigate(['/']);
-      }
+        const code = params['code'];
 
-      if (provider === 'vk') {
-        try {
-          const result: any = await http
-            .post('/api/auth/vk/exchange-code', {
-              code,
-              redirectUri: window.location.origin + '/auth/callback/vk'
-            })
-            .toPromise();
-
-          localStorage.setItem('access_token', result.access_token);
-          await router.navigate(['/']);
-        } catch (err) {
-          console.error(err);
-          await router.navigate(['/']);
+        if (!code) {
+          await this.router.navigate(['/']);
+          return;
         }
+
+        // Отправляем code на сервер
+        const result: any = await firstValueFrom(
+          this.http.post('/api/auth/google', {
+            code,
+            redirectUri: window.location.origin + '/auth/callback/google'
+          })
+        );
+
+        // Сохраняем JWT от сервера
+        this.auth.saveToken(result.token);
+
+        await this.router.navigate(['/']);
       }
-    })
+
+      // Можно добавить VK аналогично
+    } catch (err) {
+      console.error('OAuth error', err);
+      await this.router.navigate(['/']);
+    }
   }
 }
