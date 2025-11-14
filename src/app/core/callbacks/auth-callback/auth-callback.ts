@@ -26,6 +26,7 @@ export class AuthCallback {
         await router.navigate(['/']);
       }
 
+
       if (provider === 'vk') {
         try {
           const result: any = await http
