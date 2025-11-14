@@ -19,11 +19,10 @@ export class AuthCallback {
 
       const provider = this.route.snapshot.paramMap.get('provider');
 
-      console.log('code: ', code);
-
       if (!code) await router.navigate(['/']);
 
       if (provider === 'google') {
+        console.log('trying');
         await oauth.tryLoginCodeFlow();
         console.log("navigating")
         await router.navigate(['/']);
