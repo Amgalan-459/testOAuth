@@ -1,0 +1,23 @@
+<h2>Вход</h2>
+
+<form [formGroup]="form" (submit)="submit()">
+
+  <input
+    formControlName="email"
+    placeholder="Email"
+    type="email"
+  />
+
+  <input
+    formControlName="password"
+    placeholder="Пароль"
+    type="password"
+  />
+
+  <button [disabled]="form.invalid">Войти</button>
+</form>
+
+<hr />
+
+<button (click)="google()">Войти через Google</button>
+<button (click)="vk()">Войти через VK</button>
