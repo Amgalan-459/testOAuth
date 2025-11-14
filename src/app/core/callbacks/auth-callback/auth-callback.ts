@@ -8,7 +8,7 @@ import {AuthService} from '../../services/auth-service';
   selector: 'app-auth-callback',
   template: `<p>Завершаем авторизацию...</p>`,
 })
-export class AuthCallbackComponent {
+export class AuthCallback {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
