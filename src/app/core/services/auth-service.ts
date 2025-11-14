@@ -30,7 +30,7 @@ export class AuthService {
   }
 
   vkLogin() {
-    const client_id = 'VK_CLIENT_ID';
+    const client_id = '54322212';
     const redirect = encodeURIComponent(window.location.origin + '/auth/callback/vk');
     const scope = 'email';
     const state = Math.random().toString(36).slice(2);
