@@ -18,6 +18,7 @@ export class AuthCallback {
       const code = params['code'];
 
       const provider = this.route.snapshot.paramMap.get('provider');
+      console.log(provider);
 
       if (!code) await router.navigate(['/']);
 
