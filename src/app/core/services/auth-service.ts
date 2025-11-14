@@ -11,7 +11,7 @@ export class AuthService {
 
   private googleConfig: AuthConfig = {
     issuer: 'https://accounts.google.com',
-    clientId: 'GOOGLE_CLIENT_ID',
+    clientId: '247628970102-c3n855t3t5k53vvlaqu1omb7ufgn1307.apps.googleusercontent.com',
     redirectUri: window.location.origin + '/auth/callback/google',
     responseType: 'code',
     scope: 'openid profile email',
