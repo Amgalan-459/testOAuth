@@ -38,7 +38,7 @@ export class AuthCallback {
       if (provider === 'google') {
         // Отправляем code на сервер
         const result: any = await firstValueFrom(
-          this.http.post('http://95.165.74.42:8080/api/auth/google', {
+          this.http.post('https://testoauth2.onrender.com/api/auth/google', {
             code,
             redirectUri: window.location.origin + '/auth/callback/google'
           })
@@ -53,7 +53,7 @@ export class AuthCallback {
       if (provider === 'vk') {
         try {
           const result: any = await this.http
-            .post('http://95.165.74.42:8080/api/auth/vk', {
+            .post('https://testoauth2.onrender.com/api/auth/vk', {
               code,
               redirectUri: window.location.origin + '/auth/callback/vk'
             })
