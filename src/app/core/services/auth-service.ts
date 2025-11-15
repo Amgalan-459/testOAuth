@@ -52,14 +52,14 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    return this.http.post<{ token: string }>('/api/auth/login', {
+    return this.http.post<{ token: string }>('http://95.165.74.42:8080/api/auth/login', {
       email,
       password
     });
   }
 
   register(email: string, password: string) {
-    return this.http.post('/api/auth/register', {
+    return this.http.post('http://95.165.74.42:8080/api/auth/register', {
       email,
       password
     });

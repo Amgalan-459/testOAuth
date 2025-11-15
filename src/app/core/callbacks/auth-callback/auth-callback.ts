@@ -37,9 +37,8 @@ export class AuthCallback {
     try {
       if (provider === 'google') {
         // Отправляем code на сервер
-        console.log("post")
         const result: any = await firstValueFrom(
-          this.http.post('https://localhost:5001/api/auth/google', {
+          this.http.post('http://95.165.74.42:8080/api/auth/google', {
             code,
             redirectUri: window.location.origin + '/auth/callback/google'
           })
@@ -54,7 +53,7 @@ export class AuthCallback {
       if (provider === 'vk') {
         try {
           const result: any = await this.http
-            .post('/api/auth/vk/exchange-code', {
+            .post('http://95.165.74.42:8080/api/auth/vk', {
               code,
               redirectUri: window.location.origin + '/auth/callback/vk'
             })
